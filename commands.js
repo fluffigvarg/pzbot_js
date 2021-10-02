@@ -5,6 +5,11 @@ mongoose.connect(process.env.DB);
 // Global Variables
 var raffleEntries = [];
 
+// Load up Random Facts into an array
+const fs = require("fs");
+const factFile = "well_actually.txt";
+const facts = fs.readFileSync(factFile).toString().split("\n");
+
 // Main function for processing any messages with a command
 module.exports = function commands(client, channel, tags, message, self, db) {
   if (message[0] === "!") {
@@ -101,6 +106,10 @@ module.exports = function commands(client, channel, tags, message, self, db) {
           raffleEntries = [];
           console.log(raffleEntries);
         }
+        break;
+
+      case "wellactually":
+        client.say(channel, "prawnzWellActually " + facts[(Math.floor(Math.random() * facts.length))]);
         break;
 
       default:

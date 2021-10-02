@@ -8,6 +8,11 @@ var luckSentiment = 1;
 var blockList = ["Nightbot", "prawnzbot"];
 const bots = ["Nightbot", "prawnzbot"]; // TODO: exclude from fines
 
+// Load up Random Facts into an array
+const fs = require("fs");
+const factFile = "well_actually.txt";
+const facts = fs.readFileSync(factFile).toString().split("\n");
+
 // Day of Week multiplier for Thursday
 var date = new Date();
 var day = date.getDay();
@@ -28,6 +33,11 @@ module.exports = function reactions(client, channel, tags, message, self, db) {
       messageArray[indexToReplace] = "DURRRR";
       client.say(channel, messageArray.join(" "));
     }
+  }
+
+  // Random fact
+  if (calcProbablity(.05)) {
+    client.say(channel, "prawnzWellActually " + facts[(Math.floor(Math.random() * facts.length))]);
   }
 
   // Calling the Urn
