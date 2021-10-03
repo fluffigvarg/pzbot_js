@@ -40,6 +40,17 @@ module.exports = function commands(client, channel, tags, message, self, db) {
         });
         break;
 
+      // Check DURRRR status
+      case "durrrrstatus":
+      db.findOne({ username: tags.username }, function(err, user) {
+        if (user.durrrr === true) {
+          client.say(channel, "You are opted into DURRRR")
+        } else {
+          client.say(channel, "You are opted out of DURRRR")
+        }
+      });
+      break;
+
       // Magic 8 Ball
       case "magic8ball":
       case "8ball":

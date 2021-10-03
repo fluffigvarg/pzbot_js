@@ -24,41 +24,46 @@ if (day === 5) {
 module.exports = function reactions(client, channel, tags, message, self, db) {
 
   // DURRRR
-  if (calcProbablity(.05, botSentiment)) {
+  if (calcProbablity(1, botSentiment)) {
     refreshBlocklist(db);
     if (blockList.includes(tags.username) === false) {
       let messageArray = message.split(" ");
       const messageLength = messageArray.length;
-      const indexToReplace = Math.floor(Math.random() * messageLength);
-      messageArray[indexToReplace] = "DURRRR";
-      client.say(channel, messageArray.join(" "));
+      if (messageLength !== 1) {
+        const indexToReplace = Math.floor(Math.random() * messageLength);
+        messageArray[indexToReplace] = "DURRRR";
+        client.say(channel, messageArray.join(" "));
+      }
     }
   }
 
   // Random fact
-  if (calcProbablity(.05)) {
+  if (calcProbablity(.001)) {
     client.say(channel, "prawnzWellActually " + facts[(Math.floor(Math.random() * facts.length))]);
   }
 
   // Calling the Urn
-  if (calcProbablity(.005, luckSentiment)) {
+  if (calcProbablity(.0001, luckSentiment)) {
     client.action(channel, "THIS IS THE URN ConcernGold");
   }
 
   // Bot Sentiment
   if (message === "prawnzbot yes") {
     client.say(channel, "JodiesSmile");
-    botSentiment = botSentiment * 1.01;
+    const botAccelerator = 1.01;
+    botSentiment = botSentiment * botAccelerator;
   }
 
   if (message === "prawnzbot no") {
     client.say(channel, "sadnessCAT");
-    botSentiment = botSentiment * .99;
+    const botDecelerator = .99;
+    botSentiment = botSentiment * botDecelerator;
   }
 
   // Luck Sentiment
   if (message.toLowerCase().search("prawnzgl") > -1 || message.toLowerCase().search("prawnzbless") > -1) {
-    luckSentiment = luckSentiment * 1.01;
+    const luckAccelerator = 1.01;
+    luckSentiment = luckSentiment * luckAccelerator;
   }
 
   // Fines
