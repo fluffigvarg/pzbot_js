@@ -46,15 +46,15 @@ function process(client, channel, tags, message, self) {
 
       // Check DURRRR status
       case "durrrrstatus":
-      User.findOne({ username: tags.username }, function(err, user) {
-        if (user.durrrr === true) {
-          client.say(channel, "You are opted into DURRRR")
-        } else {
-          client.say(channel, "You are opted out of DURRRR")
-        }
-        reactions.refreshBlocklist();
-      });
-      break;
+        User.findOne({ username: tags.username }, function(err, user) {
+          if (user.durrrr === true) {
+            client.say(channel, "You are opted into DURRRR")
+          } else {
+            client.say(channel, "You are opted out of DURRRR")
+          }
+          reactions.refreshBlocklist();
+        });
+        break;
 
       // Magic 8 Ball
       case "magic8ball":
@@ -105,7 +105,7 @@ function process(client, channel, tags, message, self) {
 
       // Enter raffle
       case "enter":
-        if (raffleEntries.includes(tags.username) === false) {
+        if (!raffleEntries.includes(tags.username)) {
           raffleEntries.push(tags.username);
           client.say(channel, tags.username + ", you're entered!")
         }

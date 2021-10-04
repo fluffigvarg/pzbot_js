@@ -20,10 +20,10 @@ if (day === 5) {
 
 // Main reaction processing goes on here. Exported to app.js.
 function process(client, channel, tags, message, self, db) {
-  console.log(blockList);
+
   // DURRRR
-  if (calcProbablity(1, botSentiment)) {
-    if (blockList.includes(tags.username) === false) {
+  if (calcProbablity(.02, botSentiment)) {
+    if (!blockList.includes(tags.username)) {
       let messageArray = message.split(" ");
       const messageLength = messageArray.length;
       if (messageLength !== 1) {
@@ -35,12 +35,12 @@ function process(client, channel, tags, message, self, db) {
   }
 
   // Random fact
-  if (calcProbablity(.001)) {
+  if (calcProbablity(.002)) {
     client.say(channel, "prawnzWellActually " + facts[(Math.floor(Math.random() * facts.length))]);
   }
 
   // Calling the Urn
-  if (calcProbablity(.0001, luckSentiment)) {
+  if (calcProbablity(.001, luckSentiment)) {
     client.action(channel, "THIS IS THE URN ConcernGold");
   }
 
@@ -92,7 +92,7 @@ function refreshBlocklist() {
   blockList = [];
   User.find({ durrrr: false }, function(err, users) {
     users.forEach(function(user) {
-      if (blockList.includes(user.username) === false) {
+      if (!blockList.includes(user.username)) {
         blockList.push(user.username);
       }
     });
