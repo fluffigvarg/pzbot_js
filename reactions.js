@@ -1,6 +1,5 @@
-// Database connection
-const mongoose = require("mongoose");
-mongoose.connect(process.env.DB);
+// Import DB connection
+const User = require("./db.js");
 
 // Global Variables
 var botSentiment = 1;
@@ -70,7 +69,7 @@ module.exports = function reactions(client, channel, tags, message, self, db) {
   if (message.toLowerCase().search("awoo") > -1 || message.toLowerCase().search("oowa") > -1) {
     const awooCount = (message.toLowerCase().match(/awoo/g) || []).length;
     const oowaCount = (message.toLowerCase().match(/oowa/g) || []).length;
-    db.findOne({ username: tags.username }, function(err, user) {
+    User.findOne({ username: tags.username }, function(err, user) {
       if (user) {
         user.bartab += (awooCount * 350) + (oowaCount * 35000);
         user.save();
@@ -92,7 +91,7 @@ function calcProbablity(probablity = 1, throttle = 1) {
 
 // Update noDURRRR array
 function refreshBlocklist(db) {
-  db.find({ durrrr: false }, function(err, users) {
+  User.find({ durrrr: false }, function(err, users) {
     users.forEach(function(user) {
       if (blockList.includes(user.username) === false) {
         blockList.push(user.username);

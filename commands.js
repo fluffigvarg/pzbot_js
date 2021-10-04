@@ -1,6 +1,5 @@
-// Database connection
-const mongoose = require("mongoose");
-mongoose.connect(process.env.DB);
+// Import DB connection
+const User = require("./db.js");
 
 // Global Variables
 var raffleEntries = [];
@@ -11,7 +10,7 @@ const factFile = "well_actually.txt";
 const facts = fs.readFileSync(factFile).toString().split("\n");
 
 // Main function for processing any messages with a command
-module.exports = function commands(client, channel, tags, message, self, db) {
+module.exports = function commands(client, channel, tags, message, self) {
   if (message[0] === "!") {
     let messageArray = message.split(" ");
     let commandName = messageArray[0];
@@ -22,7 +21,7 @@ module.exports = function commands(client, channel, tags, message, self, db) {
 
       // Opting out of DURRRR
       case "nodurrrr":
-        db.findOne({ username: tags.username }, function(err, user) {
+        User.findOne({ username: tags.username }, function(err, user) {
           if (user) {
             user.durrrr = false;
             user.save();
@@ -32,7 +31,7 @@ module.exports = function commands(client, channel, tags, message, self, db) {
 
       // Opting into DURRRR
       case "durrrr":
-        db.findOne({ username: tags.username }, function(err, user) {
+        User.findOne({ username: tags.username }, function(err, user) {
           if (user) {
             user.durrrr = true;
             user.save();
@@ -42,7 +41,7 @@ module.exports = function commands(client, channel, tags, message, self, db) {
 
       // Check DURRRR status
       case "durrrrstatus":
-      db.findOne({ username: tags.username }, function(err, user) {
+      User.findOne({ username: tags.username }, function(err, user) {
         if (user.durrrr === true) {
           client.say(channel, "You are opted into DURRRR")
         } else {
@@ -82,7 +81,7 @@ module.exports = function commands(client, channel, tags, message, self, db) {
 
       // Check bartab via DB
       case "bartab":
-        db.findOne({ username: tags.username }, function(err, user) {
+        User.findOne({ username: tags.username }, function(err, user) {
           if (user) {
             client.say(channel, "Hey " + tags.username + ", you owe " + user.bartab.toLocaleString() + " bits!");
           }
@@ -91,7 +90,7 @@ module.exports = function commands(client, channel, tags, message, self, db) {
 
       // Check pubpoints via DB
       case "pubpoints":
-        db.findOne({ username: tags.username }, function(err, user) {
+        User.findOne({ username: tags.username }, function(err, user) {
           if (user) {
             client.say(channel, "Hey " + tags.username + ", you have " + user.pubpoints.toLocaleString() + " Pub Points!");
           }

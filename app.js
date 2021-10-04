@@ -1,23 +1,9 @@
 // Required Libraries
 require('dotenv').config();
 const tmi = require("tmi.js");
-const mongoose = require("mongoose");
 const reactions = require("./reactions.js");
 const commands = require("./commands.js");
-
-// Database connection
-mongoose.connect(process.env.DB);
-
-// Database Models
-const userSchema = new mongoose.Schema({
-  username: String,
-  bartab: Number,
-  durrrr: Boolean,
-  message: Array,
-  pubpoints: Number
-});
-
-const User = mongoose.model("User", userSchema);
+const User = require("./db.js");
 
 // Connection to Twitch
 const client = new tmi.Client({
@@ -62,8 +48,8 @@ client.on("message", (channel, tags, message, self) => {
   });
 
   // Main processing of messages
-  commands(client, channel, tags, message, self, User);
-  reactions(client, channel, tags, message, self, User);
+  commands(client, channel, tags, message, self);
+  reactions(client, channel, tags, message, self);
 });
 
 // New Cheer arrives
