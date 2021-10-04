@@ -4,8 +4,7 @@ const User = require("./db.js");
 // Global Variables
 var botSentiment = 1;
 var luckSentiment = 1;
-var blockList = ["Nightbot", "prawnzbot"];
-const bots = ["Nightbot", "prawnzbot"]; // TODO: exclude from fines
+var blockList = [];
 
 // Load up Random Facts into an array
 const fs = require("fs");
@@ -20,11 +19,10 @@ if (day === 5) {
 }
 
 // Main reaction processing goes on here. Exported to app.js.
-module.exports = function reactions(client, channel, tags, message, self, db) {
-
+function process(client, channel, tags, message, self, db) {
+  console.log(blockList);
   // DURRRR
   if (calcProbablity(1, botSentiment)) {
-    refreshBlocklist(db);
     if (blockList.includes(tags.username) === false) {
       let messageArray = message.split(" ");
       const messageLength = messageArray.length;
@@ -90,7 +88,8 @@ function calcProbablity(probablity = 1, throttle = 1) {
 }
 
 // Update noDURRRR array
-function refreshBlocklist(db) {
+function refreshBlocklist() {
+  blockList = [];
   User.find({ durrrr: false }, function(err, users) {
     users.forEach(function(user) {
       if (blockList.includes(user.username) === false) {
@@ -99,3 +98,5 @@ function refreshBlocklist(db) {
     });
   });
 }
+
+module.exports = {process, refreshBlocklist};

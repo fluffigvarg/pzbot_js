@@ -23,6 +23,7 @@ const client = new tmi.Client({
 });
 
 client.connect().catch(console.error);
+reactions.refreshBlocklist();
 
 // New message arrives
 client.on("message", (channel, tags, message, self) => {
@@ -48,8 +49,8 @@ client.on("message", (channel, tags, message, self) => {
   });
 
   // Main processing of messages
-  commands(client, channel, tags, message, self);
-  reactions(client, channel, tags, message, self);
+  commands.process(client, channel, tags, message, self);
+  reactions.process(client, channel, tags, message, self);
 });
 
 // New Cheer arrives

@@ -1,3 +1,6 @@
+// Import refreshBlocklist
+const reactions = require("./reactions.js");
+
 // Import DB connection
 const User = require("./db.js");
 
@@ -10,7 +13,7 @@ const factFile = "well_actually.txt";
 const facts = fs.readFileSync(factFile).toString().split("\n");
 
 // Main function for processing any messages with a command
-module.exports = function commands(client, channel, tags, message, self) {
+function process(client, channel, tags, message, self) {
   if (message[0] === "!") {
     let messageArray = message.split(" ");
     let commandName = messageArray[0];
@@ -24,8 +27,9 @@ module.exports = function commands(client, channel, tags, message, self) {
         User.findOne({ username: tags.username }, function(err, user) {
           if (user) {
             user.durrrr = false;
-            user.save();
           }
+          user.save();
+          reactions.refreshBlocklist();
         });
         break;
 
@@ -34,8 +38,9 @@ module.exports = function commands(client, channel, tags, message, self) {
         User.findOne({ username: tags.username }, function(err, user) {
           if (user) {
             user.durrrr = true;
-            user.save();
           }
+          user.save();
+          reactions.refreshBlocklist();
         });
         break;
 
@@ -47,6 +52,7 @@ module.exports = function commands(client, channel, tags, message, self) {
         } else {
           client.say(channel, "You are opted out of DURRRR")
         }
+        reactions.refreshBlocklist();
       });
       break;
 
@@ -128,3 +134,5 @@ module.exports = function commands(client, channel, tags, message, self) {
     }
   } else return;
 }
+
+module.exports = {process};
