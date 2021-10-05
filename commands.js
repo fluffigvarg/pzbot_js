@@ -25,31 +25,31 @@ function process(client, channel, tags, message, self) {
       // Opting in/out of DURRRR
       case "nodurrrr":
       case "durrrr":
-        User.findOne({ username: tags.username }, function(err, user) {
+        User.findOne({ userid: tags['user-id'] }, function(err, user) {
           if (user) {
             if (commandName === "nodurrrr") {
               user.durrrr = false;
-              client.say(channel, user.username + " is opted out of DURRRR")
+              client.say(channel, user.displayname + " is opted out of DURRRR")
             } else {
               user.durrrr = true;
-              client.say(channel, user.username + " is opted into DURRRR")
+              client.say(channel, user.displayname + " is opted into DURRRR")
             }
           }
           user.save();
-          reactions.refreshBlocklist();
+          setTimeout(reactions.refreshBlocklist, 1000);
         });
         break;
 
       // Check DURRRR status
       case "durrrrstatus":
-        User.findOne({ username: tags.username }, function(err, user) {
+        User.findOne({ userid: tags['user-id'] }, function(err, user) {
           if (user.durrrr === true) {
-            client.say(channel, user.username + " is opted into DURRRR")
+            client.say(channel, user.displayname + " is opted into DURRRR")
           } else {
-            client.say(channel, user.username + " is opted out of DURRRR")
+            client.say(channel, user.displayname + " is opted out of DURRRR")
           }
-          reactions.refreshBlocklist();
         });
+        setTimeout(reactions.refreshBlocklist, 1000);
         break;
 
       // Magic 8 Ball
@@ -83,29 +83,28 @@ function process(client, channel, tags, message, self) {
 
       // Check bartab via DB
       case "bartab":
-        User.findOne({ username: tags.username }, function(err, user) {
+        User.findOne({ userid: tags['user-id'] }, function(err, user) {
           if (user) {
-            client.say(channel, "Hey " + tags.username + ", you owe " + user.bartab.toLocaleString() + " bits!");
+            client.say(channel, "Hey " + user.displayname + ", you owe " + user.bartab.toLocaleString() + " bits!");
           }
         });
         break;
 
       // Check pubpoints via DB
       case "pubpoints":
-        User.findOne({ username: tags.username }, function(err, user) {
+        User.findOne({ userid: tags['user-id'] }, function(err, user) {
           if (user) {
-            client.say(channel, "Hey " + tags.username + ", you have " + user.pubpoints.toLocaleString() + " Pub Points!");
+            client.say(channel, "Hey " + user.displayname + ", you have " + user.pubpoints.toLocaleString() + " Pub Points!");
           }
         });
         break;
 
       // Enter raffle
       case "enter":
-        if (!raffleEntries.includes(tags.username)) {
-          raffleEntries.push(tags.username);
-          client.say(channel, tags.username + ", you're entered!")
+        if (!raffleEntries.includes(tags['display-name'])) {
+          raffleEntries.push(tags['display-name']);
+          client.say(channel, tags['display-name'] + ", you're entered!")
         }
-        console.log(raffleEntries);
         break;
 
       // Pick a winner, only mods can do this
@@ -116,7 +115,6 @@ function process(client, channel, tags, message, self) {
           const winner = raffleEntries[winnerIndex];
           client.say(channel, winner + " has won!");
           raffleEntries = [];
-          console.log(raffleEntries);
         }
         break;
 

@@ -22,8 +22,8 @@ if (day === 5) {
 function process(client, channel, tags, message, self, db) {
 
   // DURRRR
-  if (calcProbablity(.02, botSentiment)) {
-    if (!blockList.includes(tags.username)) {
+  if (calcProbablity(.05, botSentiment)) {
+    if (!blockList.includes(tags['user-id'])) {
       let messageArray = message.split(" ");
       const messageLength = messageArray.length;
       if (messageLength !== 1) {
@@ -35,7 +35,7 @@ function process(client, channel, tags, message, self, db) {
   }
 
   // Random fact
-  if (calcProbablity(.002)) {
+  if (calcProbablity(.005)) {
     client.say(channel, "prawnzWellActually " + facts[(Math.floor(Math.random() * facts.length))]);
   }
 
@@ -67,7 +67,7 @@ function process(client, channel, tags, message, self, db) {
   if (message.toLowerCase().search("awoo") > -1 || message.toLowerCase().search("oowa") > -1) {
     const awooCount = (message.toLowerCase().match(/awoo/g) || []).length;
     const oowaCount = (message.toLowerCase().match(/oowa/g) || []).length;
-    User.findOne({ username: tags.username }, function(err, user) {
+    User.findOne({ userid: tags["user-id"] }, function(err, user) {
       if (user) {
         user.bartab += (awooCount * 350) + (oowaCount * 35000);
         user.save();
@@ -89,12 +89,10 @@ function calcProbablity(probablity = 1, throttle = 1) {
 
 // Update noDURRRR array
 function refreshBlocklist() {
-  blockList = [];
   User.find({ durrrr: false }, function(err, users) {
+    blockList = [];
     users.forEach(function(user) {
-      if (!blockList.includes(user.username)) {
-        blockList.push(user.username);
-      }
+        blockList.push(user.userid)
     });
   });
 }

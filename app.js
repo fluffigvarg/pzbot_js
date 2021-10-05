@@ -25,12 +25,13 @@ const client = new tmi.Client({
 client.connect().catch(console.error);
 reactions.refreshBlocklist();
 
+
 // New message arrives
 client.on("message", (channel, tags, message, self) => {
   if (self) return;
 
   // Find existing user or create new user in DB
-  User.findOne({ username: tags.username }, function(err, user) {
+  User.findOne({ userid: tags['user-id'] }, function(err, user) {
     if (user) {
       user.message.push(message);
       // Pub Point Calculation
@@ -38,7 +39,9 @@ client.on("message", (channel, tags, message, self) => {
       user.save();
     } else {
       const newUser = new User({
+        userid: tags['user-id'],
         username: tags.username,
+        displayname: tags['display-name'],
         bartab: 0,
         durrrr: true,
         message: message,
@@ -58,7 +61,7 @@ client.on("cheer", (channel, tags, message, self) => {
   if (self) return;
 
   // Deduct from Bartab
-  User.findOne({ username: tags.username }, function(err, user) {
+  User.findOne({ userid: tags['user-id'] }, function(err, user) {
     if (user) {
       user.bartab -= tags.bits;
       user.save();
