@@ -16,28 +16,24 @@ const facts = fs.readFileSync(factFile).toString().split("\n");
 function process(client, channel, tags, message, self) {
   if (message[0] === "!") {
     let messageArray = message.split(" ");
-    let commandName = messageArray[0];
+    let commandName = messageArray[0].slice(1);
     let commandArgs = messageArray.slice(1);
 
     // Creating and running commands
-    switch (commandName.slice(1)) {
+    switch (commandName) {
 
-      // Opting out of DURRRR
+      // Opting in/out of DURRRR
       case "nodurrrr":
-        User.findOne({ username: tags.username }, function(err, user) {
-          if (user) {
-            user.durrrr = false;
-          }
-          user.save();
-          reactions.refreshBlocklist();
-        });
-        break;
-
-      // Opting into DURRRR
       case "durrrr":
         User.findOne({ username: tags.username }, function(err, user) {
           if (user) {
-            user.durrrr = true;
+            if (commandName === "nodurrrr") {
+              user.durrrr = false;
+              client.say(channel, user.username + " is opted out of DURRRR")
+            } else {
+              user.durrrr = true;
+              client.say(channel, user.username + " is opted into DURRRR")
+            }
           }
           user.save();
           reactions.refreshBlocklist();
@@ -48,9 +44,9 @@ function process(client, channel, tags, message, self) {
       case "durrrrstatus":
         User.findOne({ username: tags.username }, function(err, user) {
           if (user.durrrr === true) {
-            client.say(channel, "You are opted into DURRRR")
+            client.say(channel, user.username + " is opted into DURRRR")
           } else {
-            client.say(channel, "You are opted out of DURRRR")
+            client.say(channel, user.username + " is opted out of DURRRR")
           }
           reactions.refreshBlocklist();
         });
