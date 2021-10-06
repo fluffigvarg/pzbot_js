@@ -29,10 +29,10 @@ function process(client, channel, tags, message, self) {
           if (user) {
             if (commandName === "nodurrrr") {
               user.durrrr = false;
-              client.say(channel, user.displayname + " is opted out of DURRRR")
+              client.say(channel, user.displayname + " is opted out of DURRRR");
             } else {
               user.durrrr = true;
-              client.say(channel, user.displayname + " is opted into DURRRR")
+              client.say(channel, user.displayname + " is opted into DURRRR");
             }
           }
           user.save();
@@ -44,9 +44,9 @@ function process(client, channel, tags, message, self) {
       case "durrrrstatus":
         User.findOne({ userid: tags['user-id'] }, function(err, user) {
           if (user.durrrr === true) {
-            client.say(channel, user.displayname + " is opted into DURRRR")
+            client.say(channel, user.displayname + " is opted into DURRRR");
           } else {
-            client.say(channel, user.displayname + " is opted out of DURRRR")
+            client.say(channel, user.displayname + " is opted out of DURRRR");
           }
         });
         setTimeout(reactions.refreshBlocklist, 1000);
