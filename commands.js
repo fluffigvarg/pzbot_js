@@ -24,32 +24,33 @@ function process(client, channel, tags, message, self) {
 
       // Opting in/out of DURRRR
       case "nodurrrr":
+        User.updateOne({ userid: tags['user-id'] }, { durrrr: false }, function(err, result) {
+          reactions.refreshBlocklist();
+          checkStatus();
+        });
+        break;
+
       case "durrrr":
-        User.findOne({ userid: tags['user-id'] }, function(err, user) {
-          if (user) {
-            if (commandName === "nodurrrr") {
-              user.durrrr = false;
-              client.say(channel, user.displayname + " is opted out of DURRRR");
-            } else {
-              user.durrrr = true;
-              client.say(channel, user.displayname + " is opted into DURRRR");
-            }
-          }
-          user.save();
-          setTimeout(reactions.refreshBlocklist, 1000);
+        User.updateOne({ userid: tags['user-id'] }, { durrrr: true }, function(err, result) {
+          reactions.refreshBlocklist();
+          checkStatus();
         });
         break;
 
       // Check DURRRR status
       case "durrrrstatus":
-        User.findOne({ userid: tags['user-id'] }, function(err, user) {
-          if (user.durrrr === true) {
-            client.say(channel, user.displayname + " is opted into DURRRR");
-          } else {
-            client.say(channel, user.displayname + " is opted out of DURRRR");
-          }
-        });
-        setTimeout(reactions.refreshBlocklist, 1000);
+        function checkStatus() {
+          User.findOne({ userid: tags['user-id'] }, function(err, user) {
+            if (user.durrrr === true) {
+              client.say(channel, user.displayname + " is opted into DURRRR");
+              reactions.refreshBlocklist();
+            } else {
+              client.say(channel, user.displayname + " is opted out of DURRRR");
+              reactions.refreshBlocklist();
+            }
+          });
+        }
+        checkStatus();
         break;
 
       // Magic 8 Ball

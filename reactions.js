@@ -67,9 +67,10 @@ function process(client, channel, tags, message, self, db) {
   if (message.toLowerCase().search("awoo") > -1 || message.toLowerCase().search("oowa") > -1) {
     const awooCount = (message.toLowerCase().match(/awoo/g) || []).length;
     const oowaCount = (message.toLowerCase().match(/oowa/g) || []).length;
+    const tab = (awooCount * 350) + (oowaCount * 35000);
     User.findOne({ userid: tags["user-id"] }, function(err, user) {
       if (user) {
-        user.bartab += (awooCount * 350) + (oowaCount * 35000);
+        user.bartab += tab;
         user.save();
       }
     })
