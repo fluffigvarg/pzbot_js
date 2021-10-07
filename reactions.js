@@ -26,7 +26,7 @@ function process(client, channel, tags, message, self, db) {
     if (!blockList.includes(tags['user-id'])) {
       let messageArray = message.split(" ");
       const messageLength = messageArray.length;
-      if (messageLength !== 1) {
+      if (messageLength !== 1 && !messageArray.includes("DURRRR")) {
         const indexToReplace = Math.floor(Math.random() * messageLength);
         messageArray[indexToReplace] = "DURRRR";
         client.say(channel, messageArray.join(" "));
@@ -92,7 +92,7 @@ function refreshBlocklist() {
   User.find({ durrrr: false }, function(err, users) {
     blockList = [];
     users.forEach(function(user) {
-        blockList.push(user.userid)
+        blockList.push(user.userid);
     });
   });
 }

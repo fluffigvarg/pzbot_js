@@ -103,7 +103,7 @@ function process(client, channel, tags, message, self) {
       case "enter":
         if (!raffleEntries.includes(tags['display-name'])) {
           raffleEntries.push(tags['display-name']);
-          client.say(channel, tags['display-name'] + ", you're entered!")
+          client.say(channel, tags['display-name'] + ", you're entered!");
         }
         break;
 
