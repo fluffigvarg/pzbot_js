@@ -14,8 +14,8 @@ const facts = fs.readFileSync(factFile).toString().split("\n");
 // Day of Week multiplier for Thursday
 var date = new Date();
 var day = date.getDay();
-if (day === 5) {
-  botSentiment = 2;
+if (day === 4) {
+  botSentiment = 1.5;
 }
 
 // Main reaction processing goes on here. Exported to app.js.
