@@ -32,8 +32,9 @@ client.on("message", (channel, tags, message, self) => {
 
   // Find existing user or create new user in DB
   User.findOne({ userid: tags['user-id'] }, function(err, user) {
+    var getCurrentTime = () => new Date().toISOString();
     if (user) {
-      user.message.push(message);
+      user.message.push(getCurrentTime() + " [" + channel + "] " + message);
       // Pub Point Calculation
       user.pubpoints += 10 * (Math.floor(Math.random() * message.length));
       user.save();
@@ -44,7 +45,7 @@ client.on("message", (channel, tags, message, self) => {
         displayname: tags['display-name'],
         bartab: 0,
         durrrr: true,
-        message: message,
+        message: getCurrentTime() + " [" + channel + "] " + message,
         pubpoints: 0
       });
       newUser.save();
