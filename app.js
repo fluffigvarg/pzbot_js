@@ -53,8 +53,8 @@ client.on("message", (channel, tags, message, self) => {
   });
 
   // Main processing of messages
-  commands.process(client, channel, tags, message, self);
-  reactions.process(client, channel, tags, message, self);
+  commands.processMessage(client, channel, tags, message, self);
+  reactions.processMessage(client, channel, tags, message, self);
 });
 
 // New Cheer arrives

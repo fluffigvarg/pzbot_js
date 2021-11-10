@@ -1,3 +1,6 @@
+// Import .env
+require('dotenv').config();
+
 // Import refreshBlocklist
 const reactions = require("./reactions.js");
 
@@ -13,7 +16,7 @@ const factFile = "well_actually.txt";
 const facts = fs.readFileSync(factFile).toString().split("\n");
 
 // Main function for processing any messages with a command
-function process(client, channel, tags, message, self) {
+function processMessage(client, channel, tags, message, self) {
   if (message[0] === "!") {
     let messageArray = message.split(" ");
     let commandName = messageArray[0].slice(1);
@@ -22,30 +25,30 @@ function process(client, channel, tags, message, self) {
     // Creating and running commands
     switch (commandName) {
 
-      // Opting in/out of DURRRR
-      case "nodurrrr":
+      // Opting in/out of Magic Word
+      case process.env.MAGIC_WORD_NO:
         User.updateOne({ userid: tags['user-id'] }, { durrrr: false }, function(err, result) {
           reactions.refreshBlocklist();
           checkStatus();
         });
         break;
 
-      case "durrrr":
+      case process.env.MAGIC_WORD_YES:
         User.updateOne({ userid: tags['user-id'] }, { durrrr: true }, function(err, result) {
           reactions.refreshBlocklist();
           checkStatus();
         });
         break;
 
-      // Check DURRRR status
-      case "durrrrstatus":
+      // Check Magic Word status
+      case process.env.MAGIC_WORD_STATUS:
         function checkStatus() {
           User.findOne({ userid: tags['user-id'] }, function(err, user) {
             if (user.durrrr === true) {
-              client.say(channel, user.displayname + " is opted into DURRRR");
+              client.say(channel, user.displayname + " is opted into " + process.env.MAGIC_WORD);
               reactions.refreshBlocklist();
             } else {
-              client.say(channel, user.displayname + " is opted out of DURRRR");
+              client.say(channel, user.displayname + " is opted out of " + process.env.MAGIC_WORD);
               reactions.refreshBlocklist();
             }
           });
@@ -120,7 +123,7 @@ function process(client, channel, tags, message, self) {
         break;
 
       case "wellactually":
-        client.say(channel, "prawnzWellActually " + facts[(Math.floor(Math.random() * facts.length))]);
+        client.say(channel, process.env.WELL_ACTUALLY + " " + facts[(Math.floor(Math.random() * facts.length))]);
         break;
 
       default:
@@ -130,4 +133,4 @@ function process(client, channel, tags, message, self) {
   } else return;
 }
 
-module.exports = {process};
+module.exports = {processMessage};

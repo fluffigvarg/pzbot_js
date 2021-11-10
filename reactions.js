@@ -1,3 +1,6 @@
+// Import .env
+require('dotenv').config();
+
 // Import DB connection
 const User = require("./db.js");
 
@@ -19,16 +22,17 @@ if (day === 4) {
 }
 
 // Main reaction processing goes on here. Exported to app.js.
-function process(client, channel, tags, message, self, db) {
+function processMessage(client, channel, tags, message, self, db) {
 
-  // DURRRR
+  // Magic Word - randomly reiterates  a user's chat message with magic word
   if (calcProbablity(.05, botSentiment)) {
     if (!blockList.includes(tags['user-id'])) {
       let messageArray = message.split(" ");
       const messageLength = messageArray.length;
-      if (messageLength !== 1 && !messageArray.includes("DURRRR")) {
+      console.log(process.env.MAGIC_WORD);
+      if (messageLength !== 1 && !messageArray.includes(process.env.MAGIC_WORD)) {
         const indexToReplace = Math.floor(Math.random() * messageLength);
-        messageArray[indexToReplace] = "DURRRR";
+        messageArray[indexToReplace] = process.env.MAGIC_WORD;
         client.say(channel, messageArray.join(" "));
       }
     }
@@ -36,7 +40,7 @@ function process(client, channel, tags, message, self, db) {
 
   // Random fact
   if (calcProbablity(.005)) {
-    client.say(channel, "prawnzWellActually " + facts[(Math.floor(Math.random() * facts.length))]);
+    client.say(channel, process.env.WELL_ACTUALLY+ " " + facts[(Math.floor(Math.random() * facts.length))]);
   }
 
   // Calling the Urn
@@ -45,25 +49,25 @@ function process(client, channel, tags, message, self, db) {
   }
 
   // Bot Sentiment
-  if (message === "prawnzbot yes") {
+  if (message === process.env.BOT_NAME + " yes") {
     client.say(channel, "JodiesSmile");
     const botAccelerator = 1.01;
     botSentiment = botSentiment * botAccelerator;
   }
 
-  if (message === "prawnzbot no") {
+  if (message === process.env.BOT_NAME + " no") {
     client.say(channel, "sadnessCAT");
     const botDecelerator = .99;
     botSentiment = botSentiment * botDecelerator;
   }
 
   // Luck Sentiment
-  if (message.toLowerCase().search("prawnzgl") > -1 || message.toLowerCase().search("prawnzbless") > -1) {
+  if (message.toLowerCase().search(process.env.GOOD_LUCK) > -1 || message.toLowerCase().search(process.env.BLESS) > -1) {
     const luckAccelerator = 1.01;
     luckSentiment = luckSentiment * luckAccelerator;
   }
 
-  // Fines
+  // Awoo Fines
   if (message.toLowerCase().search("awoo") > -1 || message.toLowerCase().search("oowa") > -1) {
     const awooCount = (message.toLowerCase().match(/awoo/g) || []).length;
     const oowaCount = (message.toLowerCase().match(/oowa/g) || []).length;
@@ -98,4 +102,4 @@ function refreshBlocklist() {
   });
 }
 
-module.exports = {process, refreshBlocklist};
+module.exports = {processMessage, refreshBlocklist};
