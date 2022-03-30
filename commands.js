@@ -27,6 +27,7 @@ function processMessage(client, channel, tags, message, self) {
 
       // Opting in/out of Magic Word
       case process.env.MAGIC_WORD_NO:
+      case "optout":
         User.updateOne({ userid: tags['user-id'] }, { durrrr: false }, function(err, result) {
           reactions.refreshBlocklist();
           checkStatus();
@@ -42,6 +43,7 @@ function processMessage(client, channel, tags, message, self) {
 
       // Check Magic Word status
       case process.env.MAGIC_WORD_STATUS:
+      case "optin":
         function checkStatus() {
           User.findOne({ userid: tags['user-id'] }, function(err, user) {
             if (user.durrrr === true) {
