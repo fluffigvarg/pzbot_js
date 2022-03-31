@@ -67,7 +67,7 @@ function processMessage(client, channel, tags, message, self) {
           "prawnzTailBobble I feel it in my tail!",
           "prawnzWealtheGold Good show old bean!",
           "prawnzAwoo Awooooooooo~",
-          "prawnz3 Yes!",
+          "prawnz3 OHBB",
           "prawnzPet Good job!",
           "prawnzBoop HONK!",
           "prawnzTri Got the dorito!",
