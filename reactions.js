@@ -1,6 +1,9 @@
 // Import .env
 require('dotenv').config();
 
+// Import tools for calculating odds function
+const tools = require('./tools.js');
+
 // Import DB connection
 const User = require("./db.js");
 
@@ -25,7 +28,7 @@ if (day === 4) {
 function processMessage(client, channel, tags, message, self, db) {
 
   // Magic Word - randomly reiterates  a user's chat message with magic word
-  if (calcProbablity(.05, botSentiment)) {
+  if (tools.calcProbability(.05, botSentiment)) {
     if (!blockList.includes(tags['user-id'])) {
       let messageArray = message.split(" ");
       const messageLength = messageArray.length;
@@ -39,12 +42,12 @@ function processMessage(client, channel, tags, message, self, db) {
   }
 
   // Random fact
-  if (calcProbablity(.005)) {
+  if (tools.calcProbability(.005)) {
     client.say(channel, process.env.WELL_ACTUALLY+ " " + facts[(Math.floor(Math.random() * facts.length))]);
   }
 
   // Calling the Urn
-  if (calcProbablity(.001, luckSentiment)) {
+  if (tools.calcProbability(.001, luckSentiment)) {
     client.action(channel, "THIS IS THE URN ConcernGold");
   }
 
@@ -80,16 +83,6 @@ function processMessage(client, channel, tags, message, self, db) {
     })
   }
 
-}
-
-// Calculate probablity
-function calcProbablity(probablity = 1, throttle = 1) {
-  const probablityComparison = Math.random();
-  if (probablityComparison < (probablity * throttle)) {
-    return true;
-  } else {
-    return false;
-  }
 }
 
 // Update noDURRRR array
