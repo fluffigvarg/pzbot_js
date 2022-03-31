@@ -32,7 +32,6 @@ function processMessage(client, channel, tags, message, self, db) {
     if (!blockList.includes(tags['user-id'])) {
       let messageArray = message.split(" ");
       const messageLength = messageArray.length;
-      console.log(process.env.MAGIC_WORD);
       if (messageLength !== 1 && !messageArray.includes(process.env.MAGIC_WORD)) {
         const indexToReplace = Math.floor(Math.random() * messageLength);
         messageArray[indexToReplace] = process.env.MAGIC_WORD;
@@ -43,7 +42,7 @@ function processMessage(client, channel, tags, message, self, db) {
 
   // Random fact
   if (tools.calcProbability(.005)) {
-    client.say(channel, process.env.WELL_ACTUALLY+ " " + facts[(Math.floor(Math.random() * facts.length))]);
+    client.say(channel, process.env.WELL_ACTUALLY + " " + facts[(Math.floor(Math.random() * facts.length))]);
   }
 
   // Calling the Urn

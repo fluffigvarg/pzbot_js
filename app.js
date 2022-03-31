@@ -58,9 +58,14 @@ client.on("message", (channel, tags, message, self) => {
 });
 
 // New Cheer arrives
-client.on("cheer", (channel, tags, message, self) => {
-  if (self) return;
-
+client.on("cheer", (channel, tags, message) => {
+  if (tags.bits > 1) {
+    let cheerMessage = `
+    prawnzWealtheGold Thanks for the ${tags.bits} bits old bean.
+    `;
+    client.say(channel, cheerMessage);
+  }
+  
   // Deduct from Bartab
   User.findOne({ userid: tags['user-id'] }, function(err, user) {
     if (user) {
@@ -68,4 +73,29 @@ client.on("cheer", (channel, tags, message, self) => {
       user.save();
     }
   })
+});
+
+// New subscriber greeting
+client.on("subscription", (channel, username, method, message, userstate) => {
+  let subscriptionMessage = `
+  prawnzAwoo Welcome in to the Pub ${username}! Enjoy the emotes and enjoy the awoos!
+  `;
+  client.say(channel, subscriptionMessage);
+});
+
+// Resub greeting
+client.on("resub", (channel, username, months, message, userstate, methods) => {
+  let resubMessage = `
+  prawnzAwooGold Thank you ${username} for the ${months} months in the Pub! prawnzPet
+  `;
+  client.say(channel, resubMessage);
+});
+
+// Gift subs
+client.on("subgift", (channel, username, streakMonths, recipient, methods, userstate) => {
+  let senderCount = ~~userstate["msg-param-sender-count"];
+  let subgiftMessage = `
+  prawnz3Gold Thank you ${username} for the ${senderCount} gift subs! You're too kind! prawnzLove
+  `;
+  client.say(channel, subgiftMessage)
 });
