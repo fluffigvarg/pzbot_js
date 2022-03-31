@@ -3,6 +3,7 @@ require('dotenv').config();
 const tmi = require("tmi.js");
 const reactions = require("./reactions.js");
 const commands = require("./commands.js");
+const moods = require("./moods.js");
 const User = require("./db.js");
 
 // Connection to Twitch
@@ -55,6 +56,7 @@ client.on("message", (channel, tags, message, self) => {
   // Main processing of messages
   commands.processMessage(client, channel, tags, message, self);
   reactions.processMessage(client, channel, tags, message, self);
+  moods.processMessage(client, channel, tags, message, self);
 });
 
 // New Cheer arrives
