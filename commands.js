@@ -35,6 +35,7 @@ function processMessage(client, channel, tags, message, self) {
         break;
 
       case process.env.MAGIC_WORD_YES:
+      case "optin":  
         User.updateOne({ userid: tags['user-id'] }, { durrrr: true }, function(err, result) {
           reactions.refreshBlocklist();
           checkStatus();
@@ -43,7 +44,7 @@ function processMessage(client, channel, tags, message, self) {
 
       // Check Magic Word status
       case process.env.MAGIC_WORD_STATUS:
-      case "optin":
+      case "status":
         function checkStatus() {
           User.findOne({ userid: tags['user-id'] }, function(err, user) {
             if (user.durrrr === true) {

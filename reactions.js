@@ -28,7 +28,7 @@ if (day === 4) {
 function processMessage(client, channel, tags, message, self, db) {
 
   // Magic Word - randomly reiterates  a user's chat message with magic word
-  if (tools.calcProbability(.05, botSentiment)) {
+  if (tools.calcProbability(.025, botSentiment)) {
     if (!blockList.includes(tags['user-id'])) {
       let messageArray = message.split(" ");
       const messageLength = messageArray.length;

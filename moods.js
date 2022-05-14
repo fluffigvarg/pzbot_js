@@ -2,6 +2,8 @@ var positiveUsers = {};
 
 // track positive user messages via emotes
 function processMessage(client, channel, tags, message, self) {
+    if (tags.username == 'nightbot' || tags.username == 'prawnzbot') return;
+    
     const positiveEmotes = [
         'prawnzGL',
         'prawnzHype',
@@ -19,6 +21,7 @@ function processMessage(client, channel, tags, message, self) {
         'prawnzAwooGold',
         'prawnzYesGold',
         'prawnzGG',
+        'prawnzLove',
     ];
 
     const positiveResponses = [
@@ -43,7 +46,7 @@ function processMessage(client, channel, tags, message, self) {
         }
     });
 
-    if (positiveUsers[tags.username] >= 20) {
+    if (positiveUsers[tags.username] >= 10) {
         client.say(channel, positiveResponses[Math.floor(Math.random() * positiveResponses.length)]);
         positiveUsers[tags.username] = 0;
     }    
