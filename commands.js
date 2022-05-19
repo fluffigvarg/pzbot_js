@@ -15,6 +15,10 @@ const fs = require("fs");
 const factFile = "well_actually.txt";
 const facts = fs.readFileSync(factFile).toString().split("\n");
 
+// Load up Gasps into an array
+const gaspFile = "gasps.txt";
+const gasps = fs.readFileSync(gaspFile).toString().split("\n");
+
 // Main function for processing any messages with a command
 function processMessage(client, channel, tags, message, self) {
   if (message[0] === "!") {
@@ -125,9 +129,27 @@ function processMessage(client, channel, tags, message, self) {
         }
         break;
 
+      // Random fact
       case "wellactually":
         client.say(channel, process.env.WELL_ACTUALLY + " " + facts[(Math.floor(Math.random() * facts.length))]);
         break;
+      
+      // Random Gasp
+      case "gasp":
+        client.say(channel, "Here's your random gasp: " + gasps[(Math.floor(Math.random() * gasps.length))]);
+        break;
+
+      // Add a Gasp
+      case "addgasp":
+        if (tags.mod) {
+          fs.appendFile(gaspFile, "\n" + commandArgs[0], function (err) {
+            if (err) {
+              client.say(channel, "Sorry, that didn't work!");
+            } else {
+              client.say(channel, "Successfully added!");
+            }
+          })
+        }
 
       default:
         break;
