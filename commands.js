@@ -23,7 +23,7 @@ const gasps = fs.readFileSync(gaspFile).toString().split("\n");
 function processMessage(client, channel, tags, message, self) {
   if (message[0] === "!") {
     let messageArray = message.split(" ");
-    let commandName = messageArray[0].slice(1);
+    let commandName = messageArray[0].slice(1).toLowerCase();
     let commandArgs = messageArray.slice(1);
 
     // Creating and running commands
@@ -136,7 +136,7 @@ function processMessage(client, channel, tags, message, self) {
       
       // Random Gasp
       case "gasp":
-        client.say(channel, "Here's your random gasp: " + gasps[(Math.floor(Math.random() * gasps.length))]);
+        client.say(channel, "prawnzD " + gasps[(Math.floor(Math.random() * gasps.length))]);
         break;
 
       // Add a Gasp
